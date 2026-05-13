@@ -375,8 +375,9 @@ class TestGPSTextFormatting(unittest.TestCase):
 
     def test_empty_lat_shows_placeholder(self):
         t = self._gps_text("", "-74.0060")
-        self.assertIn("--", t)
-        self.assertNotIn("Lat : \n", t)
+        lines = t.splitlines()
+        # Latitude line should show the placeholder, not a blank value
+        self.assertIn("--", lines[1])
 
     def test_empty_long_shows_placeholder(self):
         t = self._gps_text("40.7128", "")
@@ -524,7 +525,9 @@ class TestDrawDashboard(unittest.TestCase):
         self.assertIn("0%", calls_str)
 
     def test_large_client_count_shows_uncapped_percentage(self):
-        # Percentage text is clients*10%, arc angle is capped but text is not
+        # The code displays clients*10% without capping (the cap only applies
+        # to the arc angle).  This test documents that existing behaviour: 15
+        # clients → "150%" in the label, even though the arc is capped at 360°.
         canvas = self._run({"CLIENTS2G": "15", "CLIENTS5G": "0"})
         calls_str = str(canvas.create_text.call_args_list)
         self.assertIn("150%", calls_str)
