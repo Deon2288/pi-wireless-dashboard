@@ -6,7 +6,7 @@ Wants=graphical.target
 [Service]
 Environment=DISPLAY=:0
 Environment=XAUTHORITY=/home/pi/.Xauthority
-ExecStart=/usr/bin/python3 /home/pi/pi-wireless-dashboard/fancy_monitor.py
+ExecStart=/usr/bin/python3 /path/to/pi-wireless-dashboard/fancy_monitor.py
 Restart=on-failure
 RestartSec=5
 User=pi
